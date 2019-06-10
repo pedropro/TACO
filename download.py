@@ -12,7 +12,7 @@ from io import BytesIO
 import sys
 
 parser = argparse.ArgumentParser(description='')
-parser.add_argument('--dataset_path', required=False, default= '../data/annotations.json', help='Path to annotations')
+parser.add_argument('--dataset_path', required=False, default= './data/annotations.json', help='Path to annotations')
 args = parser.parse_args()
 
 dataset_dir = os.path.dirname(args.dataset_path)
@@ -22,9 +22,7 @@ print('Note. If for any reason the connection is broken. Just call me again and 
 # Load annotations
 with open(args.dataset_path, 'r') as f:
     annotations = json.loads(f.read())
-    # i = 0
-    # nr_images = len(annotations['images'])
-    # for image in annotations['images']:
+
     nr_images = len(annotations['images'])
     for i in range(nr_images):
 
@@ -45,7 +43,7 @@ with open(args.dataset_path, 'r') as f:
             # Load and Save Image
             response = requests.get(url_original)
             img = Image.open(BytesIO(response.content))
-            img.save(file_path)
+            img.save(file_path, exif=img.info["exif"])
 
         # Show loading bar
         bar_size = 30
