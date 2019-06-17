@@ -44,6 +44,7 @@ To download the dataset images simply issue
 python3 download.py
 ```
 Our API contains a notebook [``demo.pynb``](https://github.com/pedropro/TACO/blob/master/demo.ipynb) to inspect the dataset and visualize annotations. To use this, you require:
+* [jupyter](https://jupyter.org/)
 * [seaborn](https://seaborn.pydata.org/)
-* [cocoapi](https://github.com/cocodataset/cocoapi)
+* [python cocoapi](https://github.com/cocodataset/cocoapi)
 
