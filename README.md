@@ -22,7 +22,7 @@ annotations.
 </div>
 </br>
 
-If you use this dataset and API, please cite us: &nbsp;
+If you use this dataset and API in a publication, please cite us: &nbsp;
 ```
 @misc{Taco19,
   author       = {Pedro F. Proença and Pedro Simões},
