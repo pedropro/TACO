@@ -37,9 +37,13 @@ For convenience, annotations are provided in the COCO format.
 TACO is still relatively small, but it is growing. Stay tuned!
 
 
-### Instructions
+### Getting started
 
 To download the dataset images simply issue
 ```
 python3 download.py
 ```
+Our API contains a notebook [``demo.pynb``](https://github.com/pedropro/TACO/blob/master/demo.ipynb) to inspect the dataset and visualize annotations. To use this, you require:
+* [seaborn](https://seaborn.pydata.org/)
+* [cocoapi](https://github.com/cocodataset/cocoapi)
+
