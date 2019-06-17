@@ -30,7 +30,7 @@ If you use this dataset and API, please cite us: &nbsp;
   month        = jun,
   year         = 2019,
   doi          = {10.5281/zenodo.3242434},
-  url          = {https://doi.org/10.5281/zenodo.3242434}
+  url          = {https://tacodataset.org}
 }
 ```
 For convenience, annotations are provided in the COCO format.
