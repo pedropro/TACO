@@ -35,3 +35,11 @@ If you use this dataset and API in a publication, please cite us: &nbsp;
 ```
 For convenience, annotations are provided in the COCO format.
 TACO is still relatively small, but it is growing. Stay tuned!
+
+
+### Instructions
+
+To download the dataset images simply issue
+```
+python3 download.py
+```
