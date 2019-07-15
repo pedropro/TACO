@@ -33,9 +33,8 @@ If you use this dataset and API in a publication, please cite us: &nbsp;
   url          = {https://tacodataset.org}
 }
 ```
-For convenience, annotations are provided in the COCO format.
+For convenience, annotations are provided in COCO format.
 TACO is still relatively small, but it is growing. Stay tuned!
-
 
 ### Getting started
 
