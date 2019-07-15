@@ -52,4 +52,4 @@ Our API contains a notebook ``demo.pynb`` to inspect the dataset and visualize a
 The implementation of [Mask-RCNN by Matterport](https://github.com/matterport/Mask_RCNN)  is included in ``/detector``
 with a few modifications. Requirements are the same. For usage instructions, check ``detector/detector.py``.
 
-**n.b.** Most of the original classes of TACO have very few annotations, therefore these must be either left out or merged together. Depending on the problem, ``detector/taco_config`` contains several class maps to target classes, which maintain the most dominant classes.
+**n.b.** Most of the original classes of TACO have very few annotations, therefore these must be either left out or merged together. Depending on the problem, ``detector/taco_config`` contains several class maps to target classes, which maintain the most dominant classes, e.g., Can, Bottles, Plastic bags
