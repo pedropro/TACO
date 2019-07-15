@@ -43,8 +43,12 @@ To download the dataset images simply issue
 ```
 python3 download.py
 ```
-Our API contains a notebook [``demo.pynb``](https://github.com/pedropro/TACO/blob/master/demo.ipynb) to inspect the dataset and visualize annotations. To use this, you require:
+Our API contains a notebook ``demo.pynb`` to inspect the dataset and visualize annotations. To use ``demo.pynb``, you require:
 * [jupyter](https://jupyter.org/)
 * [seaborn](https://seaborn.pydata.org/)
 * [python cocoapi](https://github.com/cocodataset/cocoapi)
 
+#### Object Detection
+
+The implementation of [Mask-RCNN by Matterport](https://github.com/matterport/Mask_RCNN)  is included in ``/detector``
+with a few modifications. Requirements are the same. For usage instructions, check ``detector/detector.py``.
