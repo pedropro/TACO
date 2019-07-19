@@ -53,3 +53,6 @@ The implementation of [Mask-RCNN by Matterport](https://github.com/matterport/Ma
 with a few modifications. Requirements are the same. For usage instructions, check ``detector/detector.py``.
 
 **n.b.** Most of the original classes of TACO have very few annotations, therefore these must be either left out or merged together. Depending on the problem, ``detector/taco_config`` contains several class maps to target classes, which maintain the most dominant classes, e.g., Can, Bottles and Plastic bags
+
+<p align="center">
+<img src="https://raw.githubusercontent.com/wiki/pedropro/TACO/images/teaser.gif" width="75%"/></p>
