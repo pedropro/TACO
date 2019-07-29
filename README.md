@@ -8,7 +8,7 @@ TACO is a growing image dataset of waste in the wild. It contains images of litt
 diverse environments: woods, roads and beaches. These images are manually labeled and segmented
 according to a hierarchical taxonomy to train and evaluate object detection algorithms. Currently,
 images are hosted on Flickr and we are developing a server to collect more images and
-annotations: [tacodataset.org](http://tacodataset.org)
+annotations @ [tacodataset.org](http://tacodataset.org)
 
 
 <div align="center">
