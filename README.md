@@ -2,7 +2,7 @@
 <img src="https://raw.githubusercontent.com/wiki/pedropro/TACO/images/logonav.png" width="25%"/>
 </p>
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3242434.svg)](https://doi.org/10.5281/zenodo.3242156) 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3242156.svg)](https://doi.org/10.5281/zenodo.3242156) 
 
 TACO is a growing image dataset of waste in the wild. It contains images of litter taken under
 diverse environments: woods, roads and beaches. These images are manually labeled and segmented
