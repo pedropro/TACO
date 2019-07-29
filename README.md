@@ -27,7 +27,6 @@ If you use this dataset and API in a publication, please cite us: &nbsp;
 @misc{Taco19,
   author       = {Pedro F. Proença and Pedro Simões},
   title        = {TACO: Trash Annotations in Context Dataset},
-  month        = jun,
   year         = 2019,
   doi          = {10.5281/zenodo.3242434},
   url          = {http://tacodataset.org}
