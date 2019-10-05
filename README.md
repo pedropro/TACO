@@ -50,7 +50,7 @@ Our API contains a notebook ``demo.pynb`` to inspect the dataset and visualize a
 
 The implementation of [Mask-RCNN by Matterport](https://github.com/matterport/Mask_RCNN)  is included in ``/detector``
 with a few modifications. Requirements are the same. Before using this, first use the `split_dataset.py` script to generate 
-N random train, val, test subsets. For example, run this inside the directory `detector`.
+N random train, val, test subsets. For example, run this inside the directory `detector`:
 ```
 python3 split_dataset.py --dataset_dir ../data
 ```
