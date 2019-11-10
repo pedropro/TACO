@@ -33,7 +33,8 @@ If you use this dataset and API in a publication, please cite us: &nbsp;
 }
 ```
 For convenience, annotations are provided in COCO format. Check the metadata here:
-http://cocodataset.org/#format-data 
+http://cocodataset.org/#format-data
+
 TACO is still relatively small, but it is growing. Stay tuned!
 
 # Getting started
