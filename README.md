@@ -37,6 +37,10 @@ http://cocodataset.org/#format-data
 
 TACO is still relatively small, but it is growing. Stay tuned!
 
+# News
+
+**November 20,2019** - TACO is officially open for new annotations: http://tacodataset.org/annotate
+
 # Getting started
 
 To download the dataset images simply issue
