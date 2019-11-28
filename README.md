@@ -44,10 +44,14 @@ TACO is still relatively small, but it is growing. Stay tuned!
 # Getting started
 
 ### Requirements 
+
 To install the required python packages simply type
 ```
-pip install -r requirements.txt
-pip install git+https://github.com/philferriere/cocoapi.git#egg=pycocotools^&subdirectory=PythonAPI
+pip3 install -r requirements.txt
+```
+Additionaly, to use ``demo.pynb``, you will also need [coco python api](https://github.com/cocodataset/cocoapi). You can get this using
+```
+pip3 install git+https://github.com/philferriere/cocoapi.git
 ```
 
 ### Download
@@ -56,10 +60,8 @@ To download the dataset images simply issue
 ```
 python3 download.py
 ```
-Our API contains a notebook ``demo.pynb`` to inspect the dataset and visualize annotations. To use ``demo.pynb``, you require:
-* [jupyter](https://jupyter.org/)
-* [seaborn](https://seaborn.pydata.org/)
-* [python cocoapi](https://github.com/cocodataset/cocoapi)
+
+Our API contains a jupyter notebook ``demo.pynb`` to inspect the dataset and visualize annotations.
 
 ### Trash Detection
 
