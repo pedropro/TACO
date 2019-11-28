@@ -43,6 +43,15 @@ TACO is still relatively small, but it is growing. Stay tuned!
 
 # Getting started
 
+### Requirements 
+To install the required python packages simply type
+```
+pip install -r requirements.txt
+pip install git+https://github.com/philferriere/cocoapi.git#egg=pycocotools^&subdirectory=PythonAPI
+```
+
+### Download
+
 To download the dataset images simply issue
 ```
 python3 download.py
