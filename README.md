@@ -2,8 +2,6 @@
 <img src="https://raw.githubusercontent.com/wiki/pedropro/TACO/images/logonav.png" width="25%"/>
 </p>
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3242156.svg)](https://doi.org/10.5281/zenodo.3242156) 
-
 TACO is a growing image dataset of waste in the wild. It contains images of litter taken under
 diverse environments: woods, roads and beaches. These images are manually labeled and segmented
 according to a hierarchical taxonomy to train and evaluate object detection algorithms. Currently,
@@ -39,6 +37,7 @@ TACO is still relatively small, but it is growing. Stay tuned!
 
 # News
 
+**December 20, 2019** - Added more 785 images and 2642 litter segmentations.
 **November 20, 2019** - TACO is officially open for new annotations: http://tacodataset.org/annotate
 
 # Getting started
@@ -60,6 +59,7 @@ To download the dataset images simply issue
 ```
 python3 download.py
 ```
+Alternatively, download from [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3242156.svg)](https://doi.org/10.5281/zenodo.3242156) 
 
 Our API contains a jupyter notebook ``demo.pynb`` to inspect the dataset and visualize annotations.
 
