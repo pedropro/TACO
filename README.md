@@ -37,7 +37,7 @@ TACO is still relatively small, but it is growing. Stay tuned!
 
 # News
 
-**December 20, 2019** - Added more 785 images and 2642 litter segmentations.
+**December 20, 2019** - Added more 785 images and 2642 litter segmentations. <br/>
 **November 20, 2019** - TACO is officially open for new annotations: http://tacodataset.org/annotate
 
 # Getting started
