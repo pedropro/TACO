@@ -43,7 +43,10 @@ with open(args.dataset_path, 'r') as f:
             # Load and Save Image
             response = requests.get(url_original)
             img = Image.open(BytesIO(response.content))
-            img.save(file_path, exif=img.info["exif"])
+            if img._getexif():
+                img.save(file_path, exif=img.info["exif"])
+            else:
+                img.save(file_path)
 
         # Show loading bar
         bar_size = 30
