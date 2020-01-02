@@ -293,6 +293,10 @@ if __name__ == '__main__':
             'learning_rate': config.LEARNING_RATE,
             'layers_trained': 'all'}
 
+        subdir = os.path.dirname(model.log_dir)
+        if not os.path.isdir(subdir):
+            os.mkdir(subdir)
+
         if not os.path.isdir(model.log_dir):
             os.mkdir(model.log_dir)
 
