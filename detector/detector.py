@@ -13,19 +13,19 @@ Written by Waleed Abdulla
 Usage:
 
     # Train a new model starting from pre-trained COCO weights on train set split #0
-    python3 -W ignore detector.py train --model=coco --dataset=../../data --class_map=./taco_config/map_3.csv --round 0
+    python3 -W ignore detector.py train --model=coco --dataset=../data --class_map=./taco_config/map_3.csv --round 0
 
     # Continue training a model that you had trained earlier
-    python3 -W ignore detector.py train  --dataset=../../data --model=path/to/weights.h5 --class_map=./taco_config/map_3.csv --round 0
+    python3 -W ignore detector.py train  --dataset=../data --model=path/to/weights.h5 --class_map=./taco_config/map_3.csv --round 0
 
     # Continue training the last model you trained with image augmentation
-    python3 detector.py train --dataset=../../data --model=last --round 0 --class_map=./taco_config/map_3.csv --use_aug
+    python3 detector.py train --dataset=../data --model=last --round 0 --class_map=./taco_config/map_3.csv --use_aug
 
     # Test model image by image
-    python3 detector.py test --dataset=../../data --model=last --round 0 --class_map=./taco_config/map_3.csv
+    python3 detector.py test --dataset=../data --model=last --round 0 --class_map=./taco_config/map_3.csv
 
     # Run COCO evaluation on the last model you trained
-    python3 detector.py evaluate --dataset=../../data --model=last --round 0 --class_map=./taco_config/map_3.csv
+    python3 detector.py evaluate --dataset=../data --model=last --round 0 --class_map=./taco_config/map_3.csv
 
     # Check Tensorboard
     tensorboard --logdir ./models/logs
