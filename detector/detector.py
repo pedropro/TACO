@@ -2,6 +2,11 @@
 
 Author: Pedro F. Proenza
 
+TODO:
+`- f16
+ - Test visualization
+ - video
+
 This source modifies and extends the work done by:
 
 Copyright (c) 2017 Matterport, Inc.
@@ -11,6 +16,10 @@ Written by Waleed Abdulla
 ------------------------------------------------------------
 
 Usage:
+
+    # First make sure you have split the dataset into train/val/test set. e.g. You should have annotations_0_train.json
+    # Otherwise, You can do this by calling
+    python3 split_dataset.py --dataset_dir ../data
 
     # Train a new model starting from pre-trained COCO weights on train set split #0
     python3 -W ignore detector.py train --model=coco --dataset=../data --class_map=./taco_config/map_3.csv --round 0
@@ -47,6 +56,7 @@ from model import MaskRCNN
 from config import Config
 import visualize
 import utils
+import matplotlib.pyplot as plt
 
 from pycocotools.cocoeval import COCOeval
 from pycocotools import mask as maskUtils
@@ -75,14 +85,16 @@ def test_dataset(model, dataset, nr_images):
 
         r = model.detect([image], verbose=0)[0]
 
-        # Display results
+        fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(16, 16))
+
+        # Display predictions
         visualize.display_instances(image, r['rois'], r['masks'], r['class_ids'],
-                                    dataset.class_names, r['scores'], title="Predictions")
-
+                                    dataset.class_names, r['scores'], title="Predictions", ax=ax1)
         # Display ground truth
-        #visualize.display_instances(image, gt_bbox, gt_mask, gt_class_id, dataset.class_names)
+        visualize.display_instances(image, gt_bbox, gt_mask, gt_class_id, dataset.class_names, title="GT", ax=ax2)
 
-        print(r['class_ids'])
+        # Voilà
+        plt.show()
 
 ############################################################
 #  COCO Evaluation
@@ -175,6 +187,7 @@ if __name__ == '__main__':
     parser.add_argument('--model', required=True, metavar="/path/weights.h5", help="Path to weights .h5 file or 'coco'")
     parser.add_argument('--dataset', required=True, metavar="/path/dir", help='Directory of the dataset')
     parser.add_argument('--round', required=True, type=int, help='Split number')
+    parser.add_argument('--lrate', required=False, default=0.001, type=float, help='learning rate')
     # TODO data augmentation args
     parser.add_argument('--use_aug', dest='aug', action='store_true')
     parser.set_defaults(aug=False)
@@ -221,15 +234,16 @@ if __name__ == '__main__':
             NAME = "taco"
             IMAGES_PER_GPU = 2
             GPU_COUNT = 1
-            STEPS_PER_EPOCH = 500
+            STEPS_PER_EPOCH = min(1000,int(dataset_train.num_images/(IMAGES_PER_GPU*GPU_COUNT)))
             NUM_CLASSES = nr_classes
+            LEARNING_RATE = args.lrate
         config = TacoTrainConfig()
     else:
         class TacoTestConfig(Config):
             NAME = "taco"
             GPU_COUNT = 1
             IMAGES_PER_GPU = 1
-            DETECTION_MIN_CONFIDENCE = 0.3
+            DETECTION_MIN_CONFIDENCE = 0.9
             NUM_CLASSES = nr_classes
         config = TacoTestConfig()
     config.display()
@@ -324,7 +338,7 @@ if __name__ == '__main__':
     elif args.command == "evaluate":
         nr_eval_images = len(dataset_test.image_ids)
         print("Running COCO evaluation on {} images.".format(nr_eval_images))
-        evaluate_coco(model, dataset_test, taco, "segm", limit=50)
+        evaluate_coco(model, dataset_test, taco, "segm", limit=0)
     elif args.command == "test":
         test_dataset(model, dataset_test, 10)
     else:

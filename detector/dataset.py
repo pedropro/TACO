@@ -31,11 +31,11 @@ class Taco(utils.Dataset):
         # TODO: Once we got the server running
         # if auto_download is True:
         #     self.auto_download(dataset_dir, subset, year)
-        ann_filepath = os.path.join(dataset_dir , 'annotations_')
+        ann_filepath = os.path.join(dataset_dir , 'annotations')
         if round != None:
-            ann_filepath += str(round) + "_" + subset + ".json"
+            ann_filepath += "_" + str(round) + "_" + subset + ".json"
         else:
-            ann_filepath += subset + ".json"
+            ann_filepath += ".json"
 
         assert os.path.isfile(ann_filepath)
 
