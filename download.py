@@ -10,6 +10,10 @@ from PIL import Image
 import requests
 from io import BytesIO
 import sys
+from threading import Thread
+from time import sleep
+
+NTHREADS=50
 
 parser = argparse.ArgumentParser(description='')
 parser.add_argument('--dataset_path', required=False, default= './data/annotations.json', help='Path to annotations')
@@ -19,6 +23,16 @@ dataset_dir = os.path.dirname(args.dataset_path)
 
 print('Note. If for any reason the connection is broken. Just call me again and I will start where I left.')
 
+def download_img(url,fpath):
+    # Load and Save Image
+    resp = requests.get(url)
+    img = Image.open(BytesIO(resp.content))
+    if img._getexif():
+        img.save(fpath, exif=img.info["exif"])
+    else:
+        img.save(fpath)
+
+thrds=[]
 # Load annotations
 with open(args.dataset_path, 'r') as f:
     annotations = json.loads(f.read())
@@ -40,19 +54,27 @@ with open(args.dataset_path, 'r') as f:
             os.mkdir(subdir)
 
         if not os.path.isfile(file_path):
-            # Load and Save Image
-            response = requests.get(url_original)
-            img = Image.open(BytesIO(response.content))
-            if img._getexif():
-                img.save(file_path, exif=img.info["exif"])
-            else:
-                img.save(file_path)
+            thrds.append(Thread(target=download_img,args=(url_original,file_path,)))
+            thrds[-1].setDaemon(True)
+            thrds[-1].start()
+            while len(thrds)>=NTHREADS:
+                sleep(2)
+                for ix,t in enumerate(thrds):
+                    if not t.is_alive():
+                        thrds.pop(ix)
+        #     # Load and Save Image
+        #     response = requests.get(url_original)
+        #     img = Image.open(BytesIO(response.content))
+        #     if img._getexif():
+        #         img.save(file_path, exif=img.info["exif"])
+        #     else:
+        #         img.save(file_path)
 
         # Show loading bar
+        i+=1
         bar_size = 30
         x = int(bar_size * i / nr_images)
         sys.stdout.write("%s[%s%s] - %i/%i\r" % ('Loading: ', "=" * x, "." * (bar_size - x), i, nr_images))
         sys.stdout.flush()
-        i+=1
 
     sys.stdout.write('Finished\n')
