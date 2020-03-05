@@ -36,7 +36,6 @@ http://cocodataset.org/#format-data
 TACO is still relatively small, but it is growing. Stay tuned!
 
 # News
-
 **December 20, 2019** - Added more 785 images and 2642 litter segmentations. <br/>
 **November 20, 2019** - TACO is officially open for new annotations: http://tacodataset.org/annotate
 
@@ -66,7 +65,7 @@ Our API contains a jupyter notebook ``demo.pynb`` to inspect the dataset and vis
 ### Trash Detection
 
 The implementation of [Mask-RCNN by Matterport](https://github.com/matterport/Mask_RCNN)  is included in ``/detector``
-with a few modifications. Requirements are the same. Before using this, first use the `split_dataset.py` script to generate 
+with a few modifications. Requirements are the same. Before using this, the dataset needs to be split. You can either donwload our [weights and splits](https://github.com/pedropro/TACO/releases/tag/1.0) or generate these from scratch using the `split_dataset.py` script to generate 
 N random train, val, test subsets. For example, run this inside the directory `detector`:
 ```
 python3 split_dataset.py --dataset_dir ../data
