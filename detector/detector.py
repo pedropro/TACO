@@ -2,11 +2,6 @@
 
 Author: Pedro F. Proenza
 
-TODO:
-`- f16
- - Test visualization
- - video
-
 This source modifies and extends the work done by:
 
 Copyright (c) 2017 Matterport, Inc.
@@ -18,27 +13,27 @@ Written by Waleed Abdulla
 Usage:
 
     # First make sure you have split the dataset into train/val/test set. e.g. You should have annotations_0_train.json
+    # in your dataset dir.
     # Otherwise, You can do this by calling
     python3 split_dataset.py --dataset_dir ../data
 
     # Train a new model starting from pre-trained COCO weights on train set split #0
-    python3 -W ignore detector.py train --model=coco --dataset=../data --class_map=./taco_config/map_3.csv --round 0
+    python3 -W ignore detector.py train --model=coco --dataset=../data --class_map=./taco_config/map_10.csv --round 0
 
     # Continue training a model that you had trained earlier
-    python3 -W ignore detector.py train  --dataset=../data --model=path/to/weights.h5 --class_map=./taco_config/map_3.csv --round 0
+    python3 -W ignore detector.py train  --dataset=../data --model=<model_name> --class_map=./taco_config/map_10.csv --round 0
 
     # Continue training the last model you trained with image augmentation
-    python3 detector.py train --dataset=../data --model=last --round 0 --class_map=./taco_config/map_3.csv --use_aug
+    python3 detector.py train --dataset=../data --model=last --round 0 --class_map=./taco_config/map_10.csv --use_aug
 
-    # Test model image by image
-    python3 detector.py test --dataset=../data --model=last --round 0 --class_map=./taco_config/map_3.csv
+    # Test model and visualize predictions image by image
+    python3 detector.py test --dataset=../data --model=<model_name> --round 0 --class_map=./taco_config/map_10.csv
 
-    # Run COCO evaluation on the last model you trained
-    python3 detector.py evaluate --dataset=../data --model=last --round 0 --class_map=./taco_config/map_3.csv
+    # Run COCO evaluation on a trained model
+    python3 detector.py evaluate --dataset=../data --model=<model_name> --round 0 --class_map=./taco_config/map_10.csv
 
     # Check Tensorboard
     tensorboard --logdir ./models/logs
-
 
 """
 
@@ -77,7 +72,8 @@ DEFAULT_LOGS_DIR = os.path.join(ROOT_DIR, "logs")
 def test_dataset(model, dataset, nr_images):
 
     for i in range(nr_images):
-        image_id = random.choice(dataset.image_ids)
+
+        image_id = dataset.image_ids[i] if nr_images == len(dataset.image_ids) else random.choice(dataset.image_ids)
 
         image, image_meta, gt_class_id, gt_bbox, gt_mask = \
             modellib.load_image_gt(dataset, config, image_id, use_mini_mask=False)
@@ -85,13 +81,23 @@ def test_dataset(model, dataset, nr_images):
 
         r = model.detect([image], verbose=0)[0]
 
-        fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(16, 16))
+        print(r['class_ids'].shape)
+        if r['class_ids'].shape[0]>0:
+            r_fused = utils.fuse_instances(r)
+        else:
+            r_fused = r
+
+        fig, (ax1, ax2, ax3) = plt.subplots(1, 3, figsize=(16, 16))
 
         # Display predictions
         visualize.display_instances(image, r['rois'], r['masks'], r['class_ids'],
                                     dataset.class_names, r['scores'], title="Predictions", ax=ax1)
-        # Display ground truth
-        visualize.display_instances(image, gt_bbox, gt_mask, gt_class_id, dataset.class_names, title="GT", ax=ax2)
+
+        visualize.display_instances(image, r_fused['rois'], r_fused['masks'], r_fused['class_ids'],
+                                     dataset.class_names, r_fused['scores'], title="Predictions fused", ax=ax2)
+
+        # # Display ground truth
+        visualize.display_instances(image, gt_bbox, gt_mask, gt_class_id, dataset.class_names, title="GT", ax=ax3)
 
         # Voilà
         plt.show()
@@ -118,7 +124,7 @@ def build_coco_results(dataset, image_ids, rois, class_ids, scores, masks):
 
             result = {
                 "image_id": image_id,
-                "category_id": dataset.get_source_class_id(class_id, "taco"),
+                "category_id": dataset.get_source_class_id(class_id, "taco") if dataset.num_classes>2 else 1,
                 "bbox": [bbox[1], bbox[0], bbox[3] - bbox[1], bbox[2] - bbox[0]],
                 "score": score,
                 "segmentation": maskUtils.encode(np.asfortranarray(mask))
@@ -145,7 +151,6 @@ def evaluate_coco(model, dataset, coco, eval_type="bbox", limit=0, image_ids=Non
 
     t_prediction = 0
     t_start = time.time()
-
     results = []
     for i, image_id in enumerate(image_ids):
         # Load image
@@ -154,18 +159,28 @@ def evaluate_coco(model, dataset, coco, eval_type="bbox", limit=0, image_ids=Non
         # Run detection
         t = time.time()
         r = model.detect([image], verbose=0)[0]
+        # r = utils.fuse_instances(r)
         t_prediction += (time.time() - t)
+
+
+        if not model.config.DETECTION_SCORE_RATIO:
+            scores = r["scores"]
+        else:
+            scores = r["scores"]/(r["full_scores"][:,0]+0.0001)
+
 
         # Convert results to COCO format
         # Cast masks to uint8 because COCO tools errors out on bool
         image_results = build_coco_results(dataset, taco_image_ids[i:i + 1],
                                            r["rois"], r["class_ids"],
-                                           r["scores"],
+                                           scores,
                                            r["masks"].astype(np.uint8))
         results.extend(image_results)
 
     # Load results. This modifies results with additional attributes.
     coco_results = coco.loadRes(results)
+
+    # utils.compute_confusion_matrix(coco_results, coco)
 
     # Evaluate
     cocoEval = COCOeval(coco, coco_results, eval_type)
@@ -188,7 +203,6 @@ if __name__ == '__main__':
     parser.add_argument('--dataset', required=True, metavar="/path/dir", help='Directory of the dataset')
     parser.add_argument('--round', required=True, type=int, help='Split number')
     parser.add_argument('--lrate', required=False, default=0.001, type=float, help='learning rate')
-    # TODO data augmentation args
     parser.add_argument('--use_aug', dest='aug', action='store_true')
     parser.set_defaults(aug=False)
     parser.add_argument('--use_transplants', required=False, default=None, help='Path to transplanted dataset')
@@ -202,9 +216,11 @@ if __name__ == '__main__':
 
     # Read map of target classes
     class_map = {}
+    map_to_one_class = {}
     with open(args.class_map) as csvfile:
         reader = csv.reader(csvfile)
         class_map = {row[0]: row[1] for row in reader}
+        map_to_one_class = {c: 'Litter' for c in class_map}
 
     # Load datasets
     if args.command == "train":
@@ -235,6 +251,8 @@ if __name__ == '__main__':
             IMAGES_PER_GPU = 2
             GPU_COUNT = 1
             STEPS_PER_EPOCH = min(1000,int(dataset_train.num_images/(IMAGES_PER_GPU*GPU_COUNT)))
+            USE_MINI_MASK = True
+            MINI_MASK_SHAPE = (512, 512)
             NUM_CLASSES = nr_classes
             LEARNING_RATE = args.lrate
         config = TacoTrainConfig()
@@ -243,8 +261,9 @@ if __name__ == '__main__':
             NAME = "taco"
             GPU_COUNT = 1
             IMAGES_PER_GPU = 1
-            DETECTION_MIN_CONFIDENCE = 0.9
+            DETECTION_MIN_CONFIDENCE = 0 if args.command == "evaluate" else 10
             NUM_CLASSES = nr_classes
+            USE_OBJECT_ZOOM = False
         config = TacoTestConfig()
     config.display()
 
@@ -267,34 +286,46 @@ if __name__ == '__main__':
         # Start from ImageNet trained weights
         model_path = model.get_imagenet_weights()
     else:
-        model_path = args.model
+        _, model_path = model.get_last_checkpoint(args.model)
 
     # Load weights
     if args.model.lower() == "coco":
         # Exclude the last layers because they require a matching
         # number of classes
-        model.load_weights(model_path, by_name=True, exclude=[
+        model.load_weights(model_path, None, by_name=True, exclude=[
             "mrcnn_class_logits", "mrcnn_bbox_fc",
             "mrcnn_bbox", "mrcnn_mask"])
     else:
-        model.load_weights(model_path, by_name=True)
+        model.load_weights(model_path, model_path, by_name=True)
 
     # Train or evaluate
     if args.command == "train":
 
         if args.aug:
-            # Image Augmentation Pipeline
-            augmentation_pipeline = iaa.Sequential([
-                iaa.AdditiveGaussianNoise(scale=0.01 * 255, name="AWGN"),
-                iaa.GaussianBlur(sigma=(0.0, 3.0), name="Blur"),
-                # iaa.Dropout([0.0, 0.05], name='Dropout'), # drop 0-5% of all pixels
-                iaa.Fliplr(0.5),
-                iaa.Add((-20, 20),name="Add"),
-                iaa.Multiply((0.8, 1.2), name="Multiply"),
-                iaa.Affine(scale=(0.8, 2.0)),
-                iaa.Affine(translate_percent={"x": (-0.2, 0.2), "y": (-0.2, 0.2)}),
-                iaa.Affine(rotate=(-45, 45)),  # rotate by -45 to 45 degrees
-            ], random_order=True)
+            if not config.USE_OBJECT_ZOOM:
+                # Image Augmentation Pipeline
+                augmentation_pipeline = iaa.Sequential([
+                    iaa.AdditiveGaussianNoise(scale=0.01 * 255, name="AWGN"),
+                    iaa.GaussianBlur(sigma=(0.0, 3.0), name="Blur"),
+                    # iaa.Dropout([0.0, 0.05], name='Dropout'), # drop 0-5% of all pixels
+                    iaa.Fliplr(0.5),
+                    iaa.Add((-20, 20),name="Add"),
+                    iaa.Multiply((0.8, 1.2), name="Multiply"),
+                    iaa.Affine(scale=(0.8, 2.0)),
+                    iaa.Affine(translate_percent={"x": (-0.2, 0.2), "y": (-0.2, 0.2)}),
+                    iaa.Affine(rotate=(-45, 45)),  # rotate by -45 to 45 degrees
+                ], random_order=True)
+            else:
+                # Nevermind the image translation and scaling as this is done already during zoom in
+                augmentation_pipeline = iaa.Sequential([
+                    iaa.AdditiveGaussianNoise(scale=0.01 * 255, name="AWGN"),
+                    iaa.GaussianBlur(sigma=(0.0, 3.0), name="Blur"),
+                    # iaa.Dropout([0.0, 0.05], name='Dropout'), # drop 0-5% of all pixels
+                    iaa.Fliplr(0.5),
+                    iaa.Add((-20, 20), name="Add"),
+                    iaa.Multiply((0.8, 1.2), name="Multiply"),
+                    iaa.Affine(rotate=(-45, 45)),  # rotate by -45 to 45 degrees
+                ], random_order=True)
         else:
             augmentation_pipeline = None
 
@@ -339,8 +370,15 @@ if __name__ == '__main__':
         nr_eval_images = len(dataset_test.image_ids)
         print("Running COCO evaluation on {} images.".format(nr_eval_images))
         evaluate_coco(model, dataset_test, taco, "segm", limit=0)
+
+        # Binary problem (litter/not litter)
+        # dataset_test_binary = Taco()
+        # taco_binary = dataset_test_binary.load_taco(args.dataset, args.round, "test", class_map=map_to_one_class, return_taco=True)
+        # dataset_test_binary.prepare()
+        # evaluate_coco(model, dataset_test_binary, taco_binary, "segm", limit=0)
+
     elif args.command == "test":
-        test_dataset(model, dataset_test, 10)
+        test_dataset(model, dataset_test, len(dataset_test.image_ids))
     else:
         print("'{}' is not recognized. "
               "Use 'train' or 'evaluate'".format(args.command))

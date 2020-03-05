@@ -88,7 +88,7 @@ class Config(object):
     # If enabled, resizes instance masks to a smaller size to reduce
     # memory load. Recommended when using high-resolution images.
     USE_MINI_MASK = False
-    MINI_MASK_SHAPE = (56, 56)  # (height, width) of the mini-mask
+    MINI_MASK_SHAPE = (512, 512)  # (height, width) of the mini-mask
 
     # Input image resizing
     # Generally, use the "square" resizing mode for training and inferencing
@@ -118,6 +118,14 @@ class Config(object):
     # the width and height, or more, even if MIN_IMAGE_DIM doesn't require it.
     # Howver, in 'square' mode, it can be overruled by IMAGE_MAX_DIM.
     IMAGE_MIN_SCALE = 0
+
+    # Zooms in on object annotations and crops the image, during training,
+    # to make a square image of IMAGE_MAX_DIM x IMAGE_MAX_DIM
+    USE_OBJECT_ZOOM = True
+    ZOOM_IN_FREQ = 0.5
+
+    # Make all classes share same mask
+    MASK_SHARE = False
 
     # Image mean (RGB)
     MEAN_PIXEL = np.array([123.7, 116.8, 103.9])
@@ -154,8 +162,16 @@ class Config(object):
     # ROIs below this threshold are skipped
     DETECTION_MIN_CONFIDENCE = 0.7
 
+    # Original mrcnn implementation uses the max class confidence to rank instance detection
+    # Setting this to True instead sets the detection score to the ratio between this
+    # max class confidence and the background confidence.
+    # For using this, you should change the DETECTION_MIN_CONFIDENCE to a value
+    # between [10,100]
+    DETECTION_SCORE_RATIO = True
+
     # Non-maximum suppression threshold for detection
     DETECTION_NMS_THRESHOLD = 0.3
+    DETECTION_CLASSLESS_NMS_THRESHOLD = 0.9
 
     # Learning rate and momentum
     # The Mask RCNN paper uses lr=0.02, but on TensorFlow it causes
