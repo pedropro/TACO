@@ -31,13 +31,11 @@ For more details check our paper: https://arxiv.org/abs/2003.06975
 
 If you use this dataset and API in a publication, please cite us using: &nbsp;
 ```
-@misc{taco2020,
+@article{taco2020,
     title={TACO: Trash Annotations in Context for Litter Detection},
     author={Pedro F Proença and Pedro Simões},
-    year={2020},
-    eprint={2003.06975},
-    archivePrefix={arXiv},
-    primaryClass={cs.CV}
+    journal={arXiv preprint arXiv:2003.06975},
+    year={2020}
 }
 ```
 
