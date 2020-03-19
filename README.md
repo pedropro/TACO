@@ -20,20 +20,26 @@ annotations @ [tacodataset.org](http://tacodataset.org)
 </div>
 </br>
 
-If you use this dataset and API in a publication, please cite us: &nbsp;
-```
-@misc{Taco19,
-  author       = {Pedro F. Proença and Pedro Simões},
-  title        = {TACO: Trash Annotations in Context Dataset},
-  year         = 2019,
-  doi          = {10.5281/zenodo.3242156},
-  url          = {http://tacodataset.org}
-}
-```
 For convenience, annotations are provided in COCO format. Check the metadata here:
 http://cocodataset.org/#format-data
 
 TACO is still relatively small, but it is growing. Stay tuned!
+
+# Publications
+
+For more details check our paper: https://arxiv.org/abs/2003.06975
+
+If you use this dataset and API in a publication, please cite us using: &nbsp;
+```
+@misc{taco2020,
+    title={TACO: Trash Annotations in Context for Litter Detection},
+    author={Pedro F Proença and Pedro Simões},
+    year={2020},
+    eprint={2003.06975},
+    archivePrefix={arXiv},
+    primaryClass={cs.CV}
+}
+```
 
 # News
 **December 20, 2019** - Added more 785 images and 2642 litter segmentations. <br/>
