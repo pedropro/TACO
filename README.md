@@ -53,7 +53,7 @@ pip3 install -r requirements.txt
 ```
 Additionaly, to use ``demo.pynb``, you will also need [coco python api](https://github.com/cocodataset/cocoapi). You can get this using
 ```
-pip3 install git+https://github.com/philferriere/cocoapi.git
+pip3 install git+https://github.com/philferriere/cocoapi.git#subdirectory=PythonAPI
 ```
 
 ### Download
