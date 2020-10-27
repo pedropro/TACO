@@ -66,6 +66,12 @@ Alternatively, download from [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo
 
 Our API contains a jupyter notebook ``demo.pynb`` to inspect the dataset and visualize annotations.
 
+**Unlabeled data**
+
+A list of URLs for both unlabeled and labeled images is now also provided in `data/all_image_urls.csv`.
+Each image contains one URL for each original image (second column) and one URL for a VGA-resized version (first column)
+for images hosted by Flickr. If you decide to annotate these images using other tools, please make them public and contact us so we can keep track.
+
 ### Trash Detection
 
 The implementation of [Mask R-CNN by Matterport](https://github.com/matterport/Mask_RCNN)  is included in ``/detector``
