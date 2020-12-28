@@ -72,6 +72,14 @@ A list of URLs for both unlabeled and labeled images is now also provided in `da
 Each image contains one URL for each original image (second column) and one URL for a VGA-resized version (first column)
 for images hosted by Flickr. If you decide to annotate these images using other tools, please make them public and contact us so we can keep track.
 
+**Unofficial data**
+
+Annotations submitted via our website are added weekly to `data/annotations_unofficial.json`. These have not yet been been reviewed by us -- some may be inaccurate or have poor segmentations. 
+You can use the same command to download the respective images:
+```
+python3 download.py --dataset_path ./data/annotations_unofficial.json
+```
+
 ### Trash Detection
 
 The implementation of [Mask R-CNN by Matterport](https://github.com/matterport/Mask_RCNN)  is included in ``/detector``
