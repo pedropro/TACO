@@ -62,7 +62,7 @@ To download the dataset images simply issue
 ```
 python3 download.py
 ```
-Alternatively, download from [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3242156.svg)](https://doi.org/10.5281/zenodo.3242156) 
+Alternatively, download from [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3587843.svg)](https://doi.org/10.5281/zenodo.3587843)
 
 Our API contains a jupyter notebook ``demo.pynb`` to inspect the dataset and visualize annotations.
 
