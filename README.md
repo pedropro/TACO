@@ -83,7 +83,7 @@ python3 download.py --dataset_path ./data/annotations_unofficial.json
 ### Trash Detection
 
 The implementation of [Mask R-CNN by Matterport](https://github.com/matterport/Mask_RCNN)  is included in ``/detector``
-with a few modifications. Requirements are the same. Before using this, the dataset needs to be split. You can either donwload our [weights and splits](https://github.com/pedropro/TACO/releases/tag/1.0) or generate these from scratch using the `split_dataset.py` script to generate 
+with a few modifications. Requirements are the same. Before using this, the dataset needs to be split. You can either download our [weights and splits](https://github.com/pedropro/TACO/releases/tag/1.0) or generate these from scratch using the `split_dataset.py` script to generate 
 N random train, val, test subsets. For example, run this inside the directory `detector`:
 ```
 python3 split_dataset.py --dataset_dir ../data
