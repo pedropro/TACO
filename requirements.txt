@@ -7,3 +7,4 @@ matplotlib
 seaborn
 graphviz
 Cython
+pycocotools
