@@ -1,14 +1,13 @@
 '''
-This script downloads TACO's images from Flickr given an annotation json file
+This script downloads TACO's images given an annotation json file.
+Images are saved exactly as served (original JPEG quality).
 Code written by Pedro F. Proenza, 2019
 '''
 
-import os.path
+import os
 import argparse
 import json
-from PIL import Image
 import requests
-from io import BytesIO
 import sys
 
 parser = argparse.ArgumentParser(description='')
@@ -40,13 +39,14 @@ with open(args.dataset_path, 'r') as f:
             os.mkdir(subdir)
 
         if not os.path.isfile(file_path):
-            # Load and Save Image
+            # Download and save the original bytes, no re-encoding
             response = requests.get(url_original)
-            img = Image.open(BytesIO(response.content))
-            if img._getexif():
-                img.save(file_path, exif=img.info["exif"])
-            else:
-                img.save(file_path)
+            if response.status_code != 200:
+                sys.exit('\nFailed to download %s (HTTP %d). Call me again to retry.' % (url_original, response.status_code))
+            # Write to a temporary file first so an interrupted download is not mistaken for a finished one
+            with open(file_path + '.part', 'wb') as f:
+                f.write(response.content)
+            os.replace(file_path + '.part', file_path)
 
         # Show loading bar
         bar_size = 30

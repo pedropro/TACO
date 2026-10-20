@@ -5,7 +5,7 @@
 TACO is a growing image dataset of waste in the wild. It contains images of litter taken under
 diverse environments: woods, roads and beaches. These images are manually labeled and segmented
 according to a hierarchical taxonomy to train and evaluate object detection algorithms. Currently,
-images are hosted on Flickr and we have a server that is collecting more images and
+we have a server that is collecting more images and
 annotations @ [tacodataset.org](http://tacodataset.org)
 
 
@@ -65,7 +65,7 @@ Our API contains a jupyter notebook ``demo.pynb`` to inspect the dataset and vis
 
 A list of URLs for both unlabeled and labeled images is now also provided in `data/all_image_urls.csv`.
 Each image contains one URL for each original image (second column) and one URL for a VGA-resized version (first column)
-for images hosted by Flickr. If you decide to annotate these images using other tools, please make them public and contact us so we can keep track.
+for images hosted by us. If you decide to annotate these images using other tools, please make them public and contact us so we can keep track.
 
 **Unofficial data**
 
